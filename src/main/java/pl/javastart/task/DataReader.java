@@ -13,7 +13,7 @@ public class DataReader {
     private static final int ADD_NEW = 1;
     private static final int  GET_NEXT = 2;
 
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     private Queue<Vehicle> vehicles = new LinkedList<>();
 
@@ -24,23 +24,12 @@ public class DataReader {
             option = scanner.nextInt();
             scanner.nextLine();
             switch (option) {
-                case EXIT:
-                    exit();
-                    break;
-                case ADD_NEW:
-                    addNew();
-                    break;
-                case GET_NEXT:
-                    getNext();
-                    break;
-                default:
-                    System.out.println("Wybrana opcja nie istnieje. Podaj jeszcze raz.");
+                case EXIT -> exit();
+                case ADD_NEW -> addNew();
+                case GET_NEXT -> getNext();
+                default -> System.out.println("Wybrana opcja nie istnieje. Podaj jeszcze raz.");
             }
         } while (option != EXIT);
-    }
-
-    public void close() {
-        scanner.close();
     }
 
     private void getNext() {
@@ -57,12 +46,10 @@ public class DataReader {
     private void writeVehiclesToFile() {
         String fileName = "vehicles.csv";
         File file = new File(fileName);
-        try {
-            FileWriter writer = new FileWriter(file);
+        try (FileWriter writer = new FileWriter(file)) {
             for (Vehicle vehicle : vehicles) {
                 writer.write(String.valueOf(vehicle));
             }
-            writer.flush();
         } catch (IOException e) {
             System.err.println("Nie udalo sie zapisac danych do pliku");
         }
@@ -77,8 +64,7 @@ public class DataReader {
     private Queue<Vehicle> importVehiclesFromFile() {
         String fileName = "vehicles.csv";
         File file = new File(fileName);
-        try {
-            Scanner sc = new Scanner(file);
+        try (Scanner sc = new Scanner(file)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] split = line.split(",");
@@ -118,8 +104,7 @@ public class DataReader {
         System.out.println("2 - pobierz kolejny pojazd do przegladu.");
     }
 
-    public void vehiclesToBeExamined() {
-        Queue<Vehicle> vehicles = importVehiclesFromFile();
+    public void printVehiclesToBeExamined() {
         if (!vehicles.isEmpty()) {
             System.out.println("Pojazdy w kolejce do przegladu:");
             for (Vehicle vehicle : vehicles) {

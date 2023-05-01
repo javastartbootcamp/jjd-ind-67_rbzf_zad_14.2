@@ -4,8 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
-        dataReader.vehiclesToBeExamined();
+        dataReader.printVehiclesToBeExamined();
         dataReader.chooseOption();
-        dataReader.close();
     }
 }
